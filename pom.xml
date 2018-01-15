@@ -157,7 +157,26 @@
 		    <artifactId>mockito-core</artifactId>  
 		    <version>1.9.5</version>  
 		    <scope>test</scope>  
-		</dependency>  
+		</dependency> 
+		
+		<dependency>
+		    <groupId>org.apache.derby</groupId>
+		    <artifactId>derby</artifactId>
+		    <version>10.13.1.1</version> 
+		</dependency> 
+		 
+		<!-- https://mvnrepository.com/artifact/org.apache.derby/derbyclient -->
+		<dependency>
+		   <groupId>org.apache.derby</groupId>
+		   <artifactId>derbyclient</artifactId>
+		   <version>10.13.1.1</version> 
+		</dependency>
+		
+		<dependency>
+		    <groupId>c3p0</groupId>
+		    <artifactId>c3p0</artifactId>
+		    <version>0.9.1.2</version> 
+		</dependency>
   </dependencies>
       
      
