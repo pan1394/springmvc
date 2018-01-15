@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+						http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd"
+	default-lazy-init="true">
+
+    <description>The application context configuration for Hibernate and Oracle.</description>
+ <!--  
+	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" scope="singleton" lazy-init="true">
+		<property name="jndiName">
+			<value>CCTRLDS_ORAAS</value>
+		</property>
+	</bean>  -->
+	
+	<!-- for local-->  
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"   destroy-method="close" abstract="false" scope="singleton" lazy-init="false">   
+	   <property name="driverClass" value="org.apache.derby.jdbc.EmbeddedDriver" />  
+	   <property name="jdbcUrl" value="jdbc:derby:C:/temp/test_db;create=true;user=root;password=root" /> 
+	</bean> 
+	<!--  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"  
+	    destroy-method="close" abstract="false" scope="singleton" lazy-init="false">   
+	    <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />  
+	    <property name="url" value="jdbc:derby:C:/temp/test_db;create=true" />  
+	    <property name="checkoutTimeout" value="30000" />  
+	    <property name="maxIdleTime" value="120" />  
+	    <property name="maxPoolSize" value="10" />  
+	    <property name="minPoolSize" value="1" />  
+	    <property name="initialPoolSize" value="1" />  
+	    <property name="maxStatements" value="0" />  
+	    <property name="maxStatementsPerConnection" value="0" />  
+	    <property name="idleConnectionTestPeriod" value="30" />  
+	</bean>   -->
+	
+	<!-- <bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.WebSphereNativeJdbcExtractor" />  -->
+	
+	<bean id="simpleJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg><ref bean="dataSource"/></constructor-arg>
+		<!-- <property name="nativeJdbcExtractor">
+            <ref local="nativeJdbcExtractor" />
+        </property> -->
+		<property name="fetchSize" value="10000"/>
+	</bean>
+	 
+	<!-- org.springframework.jdbc.core.simple.SimpleJdbcTemplate -->
+	<bean id="namedJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg><ref bean="simpleJdbcTemplate"/></constructor-arg>
+	</bean> 
+</beans>
