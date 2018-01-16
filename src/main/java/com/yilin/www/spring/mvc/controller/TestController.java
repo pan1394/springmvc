@@ -62,6 +62,7 @@ public class TestController {
         return new ResponseEntity<String>("The String ResponseBody with custom header Content-Type=text/plain", headers, HttpStatus.OK);  
 	  }  
 	 
+	 @SuppressWarnings("unused")
 	 @GetMapping(value="/throwable")  
 	 public ResponseEntity<String> throwException() throws MySampleException {
 		if(true){
@@ -78,7 +79,7 @@ public class TestController {
 	 		File f = resource.getFile(); 
 	 		String table = "student";
 	 		logger.info("check..."); 
-	 		db.init(f, "root", table);  
+	 		db.init(f,  table);  
 			return new StringBuffer("done ").toString();
 		}
 }

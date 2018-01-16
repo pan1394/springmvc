@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.yilin.www.spring.mvc.utils.CommonUtils;
+
 @Aspect
 @Component
 public class TimeConsumerAOP {
@@ -17,10 +19,10 @@ public class TimeConsumerAOP {
 	}
 	@Around("execution(* com.yilin.www.spring.mvc.controller.*.*(..))")
 	public Object around(ProceedingJoinPoint point) throws Throwable{
-		double start = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 		Object result = point.proceed();
-		double end = System.currentTimeMillis();
-		logger.info("Method {} consumes {} seconds totally.", point.getSignature(), (end - start)/1000);
+		long end = System.currentTimeMillis();
+		logger.info("Method {} consumes {}s totally.", point.getSignature(), CommonUtils.timePeriod(end-start));
 		return result;
 	}
 }

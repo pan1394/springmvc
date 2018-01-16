@@ -65,7 +65,7 @@ public class LogAspect {
         Date beginTime=new Date();
         beginTimeThreadLocal.set(beginTime);//线程绑定变量（该数据只有当前请求的线程可见）  
         if (logger.isDebugEnabled()){//这里日志级别为debug
-            logger.debug("开始计时: {}  URI: {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
+            logger.debug("Clock starts: {}  URI: {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
                 .format(beginTime), request.getRequestURI());
         }
 
@@ -102,10 +102,10 @@ public class LogAspect {
             long beginTime = beginTimeThreadLocal.get().getTime();//得到线程绑定的局部变量（开始时间）  
             long endTime = System.currentTimeMillis();  //2、结束时间  
             if (logger.isDebugEnabled()){
-                logger.debug("计时结束：{}  URI: {}  耗时： {}   最大内存: {}m  已分配内存: {}m  已分配内存中的剩余空间: {}m  最大可用内存: {}m",
+                logger.debug("Clock ends：{}  URI: {}  Time comsumes： {}s   Max Memory(-Xmx): {}m  Occupied Memory: {}m  Free Memory from Occupied: {}m  Max Available Memory: {}m",
                         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(endTime), 
                         request.getRequestURI(), 
-                        CommonUtils.timePeriod(endTime - beginTime),
+                        CommonUtils.timePeriod(endTime - beginTime), 
                         Runtime.getRuntime().maxMemory()/1024/1024, 
                         Runtime.getRuntime().totalMemory()/1024/1024, 
                         Runtime.getRuntime().freeMemory()/1024/1024, 

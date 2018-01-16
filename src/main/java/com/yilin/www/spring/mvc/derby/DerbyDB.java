@@ -2,6 +2,7 @@ package com.yilin.www.spring.mvc.derby;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -17,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,30 +30,35 @@ public class DerbyDB {
 
 	  Logger logger = LoggerFactory.getLogger(this.getClass());
  
-	  @Qualifier("simpleJdbcTemplate")
-	  @Autowired(required = true)
+	  /*@Qualifier("simpleJdbcTemplate")
+	  @Autowired(required = true)*/
 	  private JdbcTemplate jdbcTemplate;
-	  /** 
-	     * 读取 SQL 文件，获取 SQL 语句 
-	     *  
-	     * @param sqlFile 
-	     *            SQL 脚本文件 
-	     * @return List<sql> 返回所有 SQL 语句的 String[] 
-	     * @throws Exception 
-	     */  
-	    public String[] loadSql(File sqlFile) {  
+	  @Autowired
+	  public DerbyDB(@Qualifier("simpleJdbcTemplate") JdbcTemplate jdbcTemplate) throws IOException {
+		  this.jdbcTemplate = jdbcTemplate;
+		  Resource resource = new ClassPathResource("sample.sql");
+	 	  File f = resource.getFile(); 
+	 	  String table = "student";
+		  this.init(f,table);
+	  }
+	  public String[] loadSql(File sqlFile) {  
 	        List<String> sqlList = new ArrayList<String>();  
+	        Scanner s = null;
 	        try {     
 	        	Reader reader = new FileReader(sqlFile);
-	        	Scanner s = new Scanner(reader);
+	        	s = new Scanner(reader);
 	        	while(s.hasNextLine()){
 	        		String state = s.nextLine();
 	        		sqlList.add(state);
-	        		logger.info("加载 SQL 语句：{}", state);  
+	        		logger.info("added sql entry {}", state);  
 	        	}
 	        } catch (Exception e) {  
-	            logger.error("读取 SQL 文件，获取 SQL 语句异常：{}", e.getMessage());  
+	            logger.error("During loading a exception \'{}\' alerts", e.getMessage());  
 	        }  
+	        finally {
+	        	s.close();
+	        	s=null;
+	        }
 	        if (sqlList.size() > 0) {  
 	            String[] sqlArr = new String[sqlList.size()];  
 	            sqlList.toArray(sqlArr);  
@@ -61,11 +69,11 @@ public class DerbyDB {
 	    }  
 	  
 	    
-	  public boolean isTableExist(final String schema, final String tableName){  
+	  public boolean isTableExist(final String tableName){  
 	        
-		  	Set set = this.jdbcTemplate.execute(new ConnectionCallback<Set>(){
+		  	Set<String> set = this.jdbcTemplate.execute(new ConnectionCallback<Set<String>>(){
 				@Override
-				public Set doInConnection(Connection con)
+				public Set<String>  doInConnection(Connection con)
 						throws SQLException, DataAccessException {
 					DatabaseMetaData meta = con.getMetaData();  
 					ResultSet res = meta.getTables(null, null, null, new String[]{"TABLE"});  
@@ -80,8 +88,8 @@ public class DerbyDB {
 	        return set.contains(tableName.toUpperCase()) ;  
 	  } 
 	  
-	  public boolean init(File sqlFile, String schema, String tableName){
-		  if(!this.isTableExist(schema, tableName)){
+	  public boolean init(File sqlFile, String tableName){
+		  if(!this.isTableExist(tableName)){
 			  this.jdbcTemplate.batchUpdate(this.loadSql(sqlFile));
 		  }
 		  return true;
