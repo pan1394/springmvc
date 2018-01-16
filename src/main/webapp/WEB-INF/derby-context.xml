@@ -19,23 +19,17 @@
 	</bean>  -->
 	
 	<!-- for local-->  
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"   destroy-method="close" abstract="false" scope="singleton" lazy-init="false">   
+	<!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"   destroy-method="close" abstract="false" scope="singleton" lazy-init="false">   
 	   <property name="driverClass" value="org.apache.derby.jdbc.EmbeddedDriver" />  
 	   <property name="jdbcUrl" value="jdbc:derby:C:/temp/test_db;create=true;user=root;password=root" /> 
+	</bean>  -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
+		<property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
+		<property name="url" value="jdbc:derby:C:/temp/test_db" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
 	</bean> 
-	<!--  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"  
-	    destroy-method="close" abstract="false" scope="singleton" lazy-init="false">   
-	    <property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />  
-	    <property name="url" value="jdbc:derby:C:/temp/test_db;create=true" />  
-	    <property name="checkoutTimeout" value="30000" />  
-	    <property name="maxIdleTime" value="120" />  
-	    <property name="maxPoolSize" value="10" />  
-	    <property name="minPoolSize" value="1" />  
-	    <property name="initialPoolSize" value="1" />  
-	    <property name="maxStatements" value="0" />  
-	    <property name="maxStatementsPerConnection" value="0" />  
-	    <property name="idleConnectionTestPeriod" value="30" />  
-	</bean>   -->
 	
 	<!-- <bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.WebSphereNativeJdbcExtractor" />  -->
 	

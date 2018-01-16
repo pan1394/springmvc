@@ -4,11 +4,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +26,10 @@ import org.springframework.stereotype.Component;
 public class DerbyDB {
 
 	  Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	  public DerbyDB(){
-		  File f = new File("C:\\yp15911\\workspace_luna\\SpringMVC\\src\\main\\resources\\samle.sql");
-		  String table = "student";
-		  this.init(f, table); 
-	  }
-		@Autowired
-		@Qualifier("simpleJdbcTemplate")
-		private JdbcTemplate jdbcTemplate;
+ 
+	  @Qualifier("simpleJdbcTemplate")
+	  @Autowired(required = true)
+	  private JdbcTemplate jdbcTemplate;
 	  /** 
 	     * 读取 SQL 文件，获取 SQL 语句 
 	     *  
@@ -42,25 +40,7 @@ public class DerbyDB {
 	     */  
 	    public String[] loadSql(File sqlFile) {  
 	        List<String> sqlList = new ArrayList<String>();  
-	        try {  
-	  
-	            /*InputStream sqlFileIn = new FileInputStream(sqlFile);  
-	            StringBuilder sqlSb = new StringBuilder();  
-	            byte[] buff = new byte[1024];  
-	            int byteRead = 0;  
-	            while ((byteRead = sqlFileIn.read(buff)) != -1) {  
-	                sqlSb.append(new String(buff, 0, byteRead, "utf-8"));  
-	            }  
-	            // Windows 下换行是 \r\n, Linux 下是 \n  
-	            String[] sqlArr = sqlSb.toString()  
-	                    .split("(;\\s*\\r\\n)|(;\\s*\\n)");  
-	            for (int i = 0; i < sqlArr.length; i++) {  
-	                String sql = sqlArr[i].replaceAll("--.*", "").trim();  
-	                if (!sql.equals("")) {  
-	                    sqlList.add(sql);  
-	                    logger.info("加载 SQL 语句：{}", sql);  
-	                }  
-	            } */ 
+	        try {     
 	        	Reader reader = new FileReader(sqlFile);
 	        	Scanner s = new Scanner(reader);
 	        	while(s.hasNextLine()){
@@ -81,23 +61,29 @@ public class DerbyDB {
 	    }  
 	  
 	    
-	  public boolean isTableExist(final String tableName){  
+	  public boolean isTableExist(final String schema, final String tableName){  
 	        
-		  	boolean bool = this.jdbcTemplate.execute(new ConnectionCallback<Boolean>(){
+		  	Set set = this.jdbcTemplate.execute(new ConnectionCallback<Set>(){
 				@Override
-				public Boolean doInConnection(Connection con)
+				public Set doInConnection(Connection con)
 						throws SQLException, DataAccessException {
-					 ResultSet rs = con.getMetaData().getTables(null, null, tableName, null);  
-			         return rs.next();  
+					DatabaseMetaData meta = con.getMetaData();  
+					ResultSet res = meta.getTables(null, null, null, new String[]{"TABLE"});  
+		            HashSet<String> set=new HashSet<String>();  
+		            while (res.next()) {  
+		                set.add(res.getString("TABLE_NAME"));  
+		            }   
+			        return set;  
 				}
 	    		
 	    	});
-	        return bool;  
+	        return set.contains(tableName.toUpperCase()) ;  
 	  } 
 	  
-	  public boolean init(File sqlFile, String tableName){
-		  if(!this.isTableExist(tableName))
-		  this.jdbcTemplate.batchUpdate(this.loadSql(sqlFile));
+	  public boolean init(File sqlFile, String schema, String tableName){
+		  if(!this.isTableExist(schema, tableName)){
+			  this.jdbcTemplate.batchUpdate(this.loadSql(sqlFile));
+		  }
 		  return true;
 	  }
 }

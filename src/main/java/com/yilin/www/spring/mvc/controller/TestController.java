@@ -1,9 +1,16 @@
 package com.yilin.www.spring.mvc.controller;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yilin.www.spring.mvc.derby.DerbyDB;
 import com.yilin.www.spring.mvc.exceptions.MySampleException;
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
 import com.yilin.www.spring.mvc.utils.UUIDUtils;
@@ -20,6 +28,8 @@ import com.yilin.www.spring.mvc.utils.UUIDUtils;
 @RestController
 public class TestController {
 
+	 Logger logger = LoggerFactory.getLogger(this.getClass());
+	  
 	@Autowired(required=false) 
 	private HttpServletResponse res;
 	
@@ -59,4 +69,16 @@ public class TestController {
 		}
         return new ResponseEntity<String>("I cannot be reached", HttpStatus.OK);  
 	  } 
+	 
+	 	@Autowired DerbyDB db;
+	 	@GetMapping("/initDB")
+		@SystemControllerLog(description="test_for_logsystem")
+		public String initDB() throws IOException{
+	 		Resource resource = new ClassPathResource("sample.sql");
+	 		File f = resource.getFile(); 
+	 		String table = "student";
+	 		logger.info("check..."); 
+	 		db.init(f, "root", table);  
+			return new StringBuffer("done ").toString();
+		}
 }
