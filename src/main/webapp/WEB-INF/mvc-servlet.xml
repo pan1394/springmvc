@@ -11,20 +11,17 @@
                            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
                            http://www.springframework.org/schema/aop  
                            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"  >
-
-    <!-- <context:component-scan base-package="com.citi.controls.metric.subscription.controller.ormi" />   -->
-
-    <context:component-scan base-package="com.yilin.www.spring" />  
+ 
+    <context:component-scan base-package="com.yilin.www.spring.mvc.controller" /> 
     <aop:aspectj-autoproxy />
+    	
     <bean id="contentNegotiationManager"
              class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
        	<property name="defaultContentType" value="application/json" />
   	</bean>
   
  	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager"/>
- 	 
- 	 
-	
+ 	  
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
 			<list>
@@ -32,11 +29,5 @@
 			</list>
 		</property>
 	</bean>
- 
- 
-     <tx:annotation-driven transaction-manager="transactionManager" /> 
-      
-      
-     <import resource="./derby-context.xml" />
-      
+  
 </beans>

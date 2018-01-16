@@ -18,7 +18,7 @@ public class WebExceptionHandler {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
 	@ExceptionHandler({MySampleException.class})
 	public ResponseEntity handler(HttpServletRequest request, HttpServletResponse response, MySampleException e)
 			throws IOException {
