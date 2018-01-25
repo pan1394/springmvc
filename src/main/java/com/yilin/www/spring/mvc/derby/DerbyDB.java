@@ -38,7 +38,7 @@ public class DerbyDB {
 		  this.jdbcTemplate = jdbcTemplate;
 		  Resource resource = new ClassPathResource("sample.sql");
 	 	  File f = resource.getFile(); 
-	 	  String table = "student";
+	 	  String table = "token_t";
 		  this.init(f,table);
 	  }
 	  public String[] loadSql(File sqlFile) {  

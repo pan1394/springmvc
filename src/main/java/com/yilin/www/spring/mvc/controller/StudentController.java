@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yilin.www.spring.dao.StudentDao;
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
+import com.yilin.www.spring.token2.Authorization;
 import com.yilin.www.spring.vo.Student;
 
 @RestController
@@ -34,7 +35,7 @@ public class StudentController {
 		this.res = res;
 	}
 
-
+	@Authorization
 	@GetMapping("/add/{studnetName}")
 	@SystemControllerLog(description="test_for_logsystem")
 	public ResponseEntity<List<Student>> add(@PathVariable String studnetName){

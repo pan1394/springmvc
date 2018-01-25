@@ -77,7 +77,7 @@ public class TestController {
 		public String initDB() throws IOException{
 	 		Resource resource = new ClassPathResource("sample.sql");
 	 		File f = resource.getFile(); 
-	 		String table = "student";
+	 		String table = "token_t";
 	 		logger.info("check..."); 
 	 		db.init(f,  table);  
 			return new StringBuffer("done ").toString();
