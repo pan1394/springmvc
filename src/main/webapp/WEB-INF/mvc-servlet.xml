@@ -29,5 +29,7 @@
 			</list>
 		</property>
 	</bean>
-  
+    <mvc:interceptors>
+    	<ref bean="authorizationInterceptor"/> 
+    </mvc:interceptors>
 </beans>

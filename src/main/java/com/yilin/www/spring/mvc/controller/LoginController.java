@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
+import com.yilin.www.spring.mvc.utils.CookieUtils;
 import com.yilin.www.spring.token.TokenManager;
 
 @RestController
@@ -64,7 +65,7 @@ public class LoginController {
 	public ResponseEntity<String> auth(){
 		 Cookie[] cks = req.getCookies();
 		 String s = null;
-		 String token = readToken(cks).getValue();
+		 String token = CookieUtils.getCookieByName("psessionId",cks).getValue();
 		 if(tokenManager.auth(token)){
 			 s = "you are authorized.";
 		 }else{
@@ -76,7 +77,7 @@ public class LoginController {
 	 @SystemControllerLog(description="test_for_logsystem")
 	 public ResponseEntity<String> logout() {  
 		Cookie[] cks = req.getCookies();
-		Cookie cookie = readToken(cks);
+		Cookie cookie = CookieUtils.getCookieByName("psessionId",cks);
 		cookie.setMaxAge(-1);
 		cookie.setValue(null);
 		String token = cookie.getValue();
@@ -85,18 +86,6 @@ public class LoginController {
 		//logger.info("Display all students: {}", show.toString());
         return new ResponseEntity<String>("you loged out.", HttpStatus.OK);  
 	  }  
-	 
-	 private Cookie readToken(Cookie[] cks){ 
-		 Cookie token = null;
-		 for(Cookie ck : cks){
-			 if("psessionId".equals( ck.getName())){
-				 token = ck;
-				 break;
-			 }
-		 }
-		 return token;
-	 }
-	 
-	   
+  
 	 
 }

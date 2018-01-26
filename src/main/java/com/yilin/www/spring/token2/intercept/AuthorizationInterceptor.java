@@ -2,6 +2,7 @@ package com.yilin.www.spring.token2.intercept;
 
 import java.lang.reflect.Method;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,9 +12,11 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.yilin.www.spring.mvc.utils.Constants;
+import com.yilin.www.spring.mvc.utils.CookieUtils;
 import com.yilin.www.spring.token2.Authorization;
 import com.yilin.www.spring.token2.TokenManager;
 import com.yilin.www.spring.token2.TokenModel;
+import com.yilin.www.spring.token2.designpattern.AuthorizationFacade;
 
 /**
  * 自定义拦截器，判断此次请求是否有权限
@@ -24,8 +27,11 @@ import com.yilin.www.spring.token2.TokenModel;
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
-    private TokenManager manager;
-
+    private TokenManager manager;  
+    
+    @Autowired
+    private AuthorizationFacade authFacade;
+    
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws Exception {
         //如果不是映射到方法直接通过
@@ -35,7 +41,13 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         //从header中得到token
-        String authorization = request.getHeader(Constants.AUTHORIZATION);
+       /* String authorization = request.getHeader(Constants.AUTHORIZATION);
+        if(authorization == null){
+        	 Cookie[] cookies = request.getCookies();
+        	 Cookie cookie = CookieUtils.getCookieByName(Constants.AUTHORIZATION, cookies);
+        	 authorization = cookie==null? null : cookie.getValue();
+        }*/
+        String authorization = authFacade.getAuthorizationToken(request);
         //验证token
         TokenModel model = manager.getToken(authorization);
         if (manager.checkToken(model)) {

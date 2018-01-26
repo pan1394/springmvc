@@ -17,4 +17,5 @@
   	<tx:annotation-driven transaction-manager="transactionManager" /> 
   	<import resource="./derby-context.xml" />
   	<import resource="./spring-redis.xml" />
+  	 
 </beans>

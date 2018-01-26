@@ -33,4 +33,8 @@ public class TokenModel {
     public void setToken(String token) {
         this.token = token;
     }
+    
+    public String toString(){
+    	return new StringBuilder().append(this.userId).append("_").append(this.token).toString();
+    }
 }

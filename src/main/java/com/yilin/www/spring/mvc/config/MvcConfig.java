@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.yilin.www.spring.token2.CurrentUserMethodArgumentResolver;
 import com.yilin.www.spring.token2.intercept.AuthorizationInterceptor;
@@ -21,10 +21,10 @@ import com.yilin.www.spring.token2.intercept.AuthorizationInterceptor;
  * @author ScienJus
  * @date 2015/7/30.
  */
-@EnableWebMvc
-@Configuration
-@ComponentScan
-public class MvcConfig extends WebMvcConfigurerAdapter   {//WebMvcConfigurer {
+//@EnableWebMvc
+//@Configuration
+//@ComponentScan
+public class MvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private AuthorizationInterceptor authorizationInterceptor;
@@ -34,7 +34,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter   {//WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authorizationInterceptor);
+        registry.addInterceptor(authorizationInterceptor).addPathPatterns("/**");
     }
 
     @Override

@@ -2,6 +2,9 @@ package com.yilin.www.spring.mvc.controller;
 
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yilin.www.spring.dao.StudentDao;
 import com.yilin.www.spring.mvc.config.ResultStatus;
 import com.yilin.www.spring.mvc.model.ResultModel;
+import com.yilin.www.spring.mvc.utils.Constants;
+import com.yilin.www.spring.mvc.utils.CookieUtils;
 import com.yilin.www.spring.token2.Authorization;
 import com.yilin.www.spring.token2.CurrentUser;
 import com.yilin.www.spring.token2.TokenManager;
@@ -36,6 +41,9 @@ public class TokenController {
     @Autowired
     private TokenManager tokenManager;
 
+    @Autowired
+    private HttpServletResponse res;
+    
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity login(@RequestParam Long userId, @RequestParam String password) {
         Assert.notNull(userId, "username can not be empty");
@@ -51,6 +59,7 @@ public class TokenController {
         }
         //生成一个token，保存用户登录状态
         TokenModel model = tokenManager.createToken(userId);
+        CookieUtils.saveAsSimpleCookie(Constants.AUTHORIZATION, model.toString(), res);
         return new ResponseEntity<>(ResultModel.ok(model), HttpStatus.OK);
     }
 
@@ -62,4 +71,6 @@ public class TokenController {
         return new ResponseEntity<>(ResultModel.ok(), HttpStatus.OK);
     }
 
+    
+   
 }
