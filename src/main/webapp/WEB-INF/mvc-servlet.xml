@@ -11,15 +11,21 @@
                            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
                            http://www.springframework.org/schema/aop  
                            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"  >
- 	<mvc:annotation-driven/>
+ 	<!-- <mvc:annotation-driven/> -->
     <context:component-scan base-package="com.yilin.www.spring.mvc.controller" /> 
     <aop:aspectj-autoproxy />
-    	
+     
     <bean id="contentNegotiationManager"
              class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
        	<property name="defaultContentType" value="application/json" />
   	</bean>
   
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <!-- Example: a logical view name of 'showMessage' is mapped to '/WEB-INF/jsp/showMessage.jsp' -->
+            <property name="prefix" value="/WEB-INF/swagger/"/>
+            <property name="suffix" value=".jsp"/>
+    </bean>
+    
  	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager"/>
  	  
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">

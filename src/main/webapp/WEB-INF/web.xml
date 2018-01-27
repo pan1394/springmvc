@@ -12,16 +12,19 @@
     <listener>  
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
     </listener> 
-    
+     
 	<servlet>
 		<servlet-name>mvc</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<!--  default load <servlet-name>-servlet  -->
 		<load-on-startup>1</load-on-startup>
-	</servlet> 
-	
+	</servlet>  
 	<servlet-mapping>
 	    <servlet-name>mvc</servlet-name>
 	    <url-pattern>/spring/*</url-pattern>
 	</servlet-mapping> 
+	 
+	 <welcome-file-list>
+        <welcome-file>/swagger/index.html</welcome-file> 
+    </welcome-file-list>
 </web-app>

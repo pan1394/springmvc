@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wordnik.swagger.annotations.ApiOperation;
 import com.yilin.www.spring.dao.StudentDao;
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
 import com.yilin.www.spring.token2.Authorization;
@@ -38,6 +39,7 @@ public class StudentController {
 	@Authorization
 	@GetMapping("/add/{studnetName}")
 	@SystemControllerLog(description="test_for_logsystem")
+	
 	public ResponseEntity<List<Student>> add(@PathVariable String studnetName){
 		 Student s = new Student();
 		 s.setName(studnetName);
@@ -50,6 +52,7 @@ public class StudentController {
 	
 	 @GetMapping(value="/show")  
 	 @SystemControllerLog(description="test_for_logsystem")
+	 @ApiOperation(value = "查询所有学生", httpMethod = "GET", notes = "暂无")
 	 public ResponseEntity<List<Student>> showAllStudents() {  
 		List<Student> show = stud.getAllStudent();
 		logger.info("Display all students: {}", show.toString());
