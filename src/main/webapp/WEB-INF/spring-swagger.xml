@@ -15,7 +15,8 @@
     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
         http://www.springframework.org/schema/util 
       http://www.springframework.org/schema/util/spring-util-3.0.xsd">
-    <mvc:annotation-driven/>    
+     
+   
  	<bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
 	<mvc:resources mapping="/swagger/**" location="/swagger/"/>  
 </beans>

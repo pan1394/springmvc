@@ -25,6 +25,10 @@ import com.yilin.www.spring.mvc.exceptions.MySampleRuntimeException;
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
 import com.yilin.www.spring.mvc.model.ResultModel;
 import com.yilin.www.spring.mvc.utils.UUIDUtils;
+import com.yilin.www.spring.token2.CurrentUser;
+import com.yilin.www.spring.vo.Student;
+
+import jdk.internal.jline.internal.Log;
 
 @RestController
 public class TestController {
@@ -73,6 +77,14 @@ public class TestController {
 		}
 		String returnValue = "I cannot be reached"; 
         return new ResponseEntity<ResultModel>(ResultModel.ok(returnValue), HttpStatus.OK);  
+	 } 
+	 
+	 
+	 @GetMapping(value="/currentUser")  
+	 @SystemControllerLog(description="test_for_logsystem")
+	 public ResponseEntity<ResultModel> customArg(@CurrentUser Student u) throws MySampleRuntimeException{
+		// Log.info("current user, id {}, name {}", u.getId(), u.getName());
+        return new ResponseEntity<ResultModel>(ResultModel.ok(u), HttpStatus.OK);  
 	 } 
 	 
 	 

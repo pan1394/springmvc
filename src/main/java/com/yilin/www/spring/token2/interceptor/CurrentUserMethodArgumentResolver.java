@@ -17,7 +17,7 @@ import com.yilin.www.spring.vo.Student;
 
  
 /**
- * 增加方法注入，将含有CurrentUser注解的方法参数注入当前登录用户
+ *  
  * @author ScienJus
  * @date 2015/7/31.
  */
@@ -28,8 +28,7 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
     private StudentDao userRepository;
 
     @Override
-    public boolean supportsParameter(MethodParameter parameter) {
-        //如果参数类型是User并且有CurrentUser注解则支持
+    public boolean supportsParameter(MethodParameter parameter) { 
         if (parameter.getParameterType().isAssignableFrom(Student.class) &&
                 parameter.hasParameterAnnotation(CurrentUser.class)) {
             return true;
@@ -39,10 +38,8 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        //取出鉴权时存入的登录用户Id
         Long currentUserId = (Long) webRequest.getAttribute(Constants.CURRENT_USER_ID, RequestAttributes.SCOPE_REQUEST);
         if (currentUserId != null) {
-            //从数据库中查询并返回
             return userRepository.getStudent(currentUserId).get(0);
         }
         throw new MissingServletRequestPartException(Constants.CURRENT_USER_ID);
