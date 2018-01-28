@@ -1,7 +1,6 @@
 package com.yilin.www.spring.mvc.controller.test;
 
 import org.junit.Test;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
@@ -19,14 +18,14 @@ public class TestControllerTest extends BaseTestFramework {
 	}*/
 	@Test
 	public void testHelloWorld() throws Exception  {
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/hello/samer"))   
+		 mockMvc.perform(MockMvcRequestBuilders.get("/hello/samer"))   
 	            .andDo(MockMvcResultHandlers.print())   
 	            .andReturn(); 
 	}
 	
 	@Test
 	public void testResponse() throws Exception  {
-		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/response/headers"))   
+		 mockMvc.perform(MockMvcRequestBuilders.post("/response/headers"))   
 	            .andDo(MockMvcResultHandlers.print())   
 	            .andReturn(); ;
 	}

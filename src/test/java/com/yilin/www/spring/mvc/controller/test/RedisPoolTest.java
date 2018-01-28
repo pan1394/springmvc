@@ -13,6 +13,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 
 public class RedisPoolTest {
 
+@SuppressWarnings("unchecked")
 public static void main(String[] args) {
         ClassPathXmlApplicationContext appCtx = new ClassPathXmlApplicationContext("spring-redis.xml");
         final RedisTemplate<String, Object> redisTemplate = appCtx.getBean("redisTemplate",RedisTemplate.class);
@@ -49,5 +50,6 @@ public static void main(String[] args) {
         zset.add("lpZset", "178cm", 2);
         //输出有序 set 集合
         System.out.println(zset.rangeByScore("lpZset", 0, 2));
+        appCtx.close();
     }
 }

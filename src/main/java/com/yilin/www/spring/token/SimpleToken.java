@@ -30,6 +30,7 @@ public class SimpleToken extends JdbcDaoSupport implements TokenManager{
 	public void save(String Token) {
 		StringBuffer sb = new StringBuffer("insert into token_t values(?,'A')");
 		int l = this.getJdbcTemplate().update(sb.toString(),Token);
+		if(l == 1 )
 		logger.info("{} has been saved.", Token);
 	}
 
@@ -47,6 +48,7 @@ public class SimpleToken extends JdbcDaoSupport implements TokenManager{
 	public void delete(String Token) {
 		StringBuffer sb = new StringBuffer("update token_t set is_active='D' where token =? ");
 		int i = this.getJdbcTemplate().update(sb.toString(), Token);
+		if(i > 0)
 		logger.info("{} has been deleted.", Token);
 	}
 }

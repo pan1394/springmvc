@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -19,14 +18,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.NamedThreadLocal;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import com.yilin.www.spring.mvc.utils.CommonUtils;
 import com.yilin.www.spring.mvc.utils.UUIDUtils;
 
 /**
- * ÏµÍ³ÈÕÖ¾ÇÐÃæÀà
+ * ÏµÍ³ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * @author lin.r.x
  *
  */
@@ -50,26 +48,26 @@ public class LogAspect {
 //    private LogService logService;
 
     /**
-     * Controller²ãÇÐµã ×¢½âÀ¹½Ø
+     * Controllerï¿½ï¿½ï¿½Ðµï¿½ ×¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
      */
     @Pointcut("@annotation(com.yilin.www.spring.mvc.logmanager.SystemControllerLog)")
     public void controllerAspect(){}
 
     /**
-     * Ç°ÖÃÍ¨Öª ÓÃÓÚÀ¹½ØController²ã¼ÇÂ¼ÓÃ»§µÄ²Ù×÷µÄ¿ªÊ¼Ê±¼ä
-     * @param joinPoint ÇÐµã
+     * Ç°ï¿½ï¿½Í¨Öª ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Controllerï¿½ï¿½ï¿½Â¼ï¿½Ã»ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½Ê¼Ê±ï¿½ï¿½
+     * @param joinPoint ï¿½Ðµï¿½
      * @throws InterruptedException 
      */
     @Before("controllerAspect()")
     public void doBefore(JoinPoint joinPoint) throws InterruptedException{
         Date beginTime=new Date();
-        beginTimeThreadLocal.set(beginTime);//Ïß³Ì°ó¶¨±äÁ¿£¨¸ÃÊý¾ÝÖ»ÓÐµ±Ç°ÇëÇóµÄÏß³Ì¿É¼û£©  
-        if (logger.isDebugEnabled()){//ÕâÀïÈÕÖ¾¼¶±ðÎªdebug
+        beginTimeThreadLocal.set(beginTime);//ï¿½ß³Ì°ó¶¨±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö»ï¿½Ðµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì¿É¼ï¿½ï¿½ï¿½  
+        if (logger.isDebugEnabled()){//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Îªdebug
             logger.debug("Clock starts: {}  URI: {}", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS")
                 .format(beginTime), request.getRequestURI());
         }
 
-        //¶ÁÈ¡sessionÖÐµÄÓÃ»§ 
+        //ï¿½ï¿½È¡sessionï¿½Ðµï¿½ï¿½Ã»ï¿½ 
 //        HttpSession session = request.getSession();       
 //        User user = (User) session.getAttribute("ims_user");    
 //        currentUser.set(user);
@@ -77,32 +75,31 @@ public class LogAspect {
     }
 
     /**
-     * ºóÖÃÍ¨Öª ÓÃÓÚÀ¹½ØController²ã¼ÇÂ¼ÓÃ»§µÄ²Ù×÷
-     * @param joinPoint ÇÐµã
-     */
-    @SuppressWarnings("unchecked")
+     * ï¿½ï¿½ï¿½ï¿½Í¨Öª ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Controllerï¿½ï¿½ï¿½Â¼ï¿½Ã»ï¿½ï¿½Ä²ï¿½ï¿½ï¿½
+     * @param joinPoint ï¿½Ðµï¿½
+     */ 
     @After("controllerAspect()")
     public void doAfter(JoinPoint joinPoint) {
 //        User user = currentUser.get();
 //        if(user !=null)
         {
             String title="";
-            String type="info";                       //ÈÕÖ¾ÀàÐÍ(info:Èë¿â,error:´íÎó)
-            String remoteAddr=request.getRemoteAddr();//ÇëÇóµÄIP
-            String requestUri=request.getRequestURI();//ÇëÇóµÄUri
-            String method=request.getMethod();        //ÇëÇóµÄ·½·¨ÀàÐÍ(post/get)
-            Map<String,String[]> params=request.getParameterMap(); //ÇëÇóÌá½»µÄ²ÎÊý
+            String type="info";                       //ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½(info:ï¿½ï¿½ï¿½,error:ï¿½ï¿½ï¿½ï¿½)
+            String remoteAddr=request.getRemoteAddr();//ï¿½ï¿½ï¿½ï¿½ï¿½IP
+            String requestUri=request.getRequestURI();//ï¿½ï¿½ï¿½ï¿½ï¿½Uri
+            String method=request.getMethod();        //ï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(post/get)
+            Map<String,String[]> params=request.getParameterMap(); //ï¿½ï¿½ï¿½ï¿½ï¿½á½»ï¿½Ä²ï¿½ï¿½ï¿½
 
             try {
                 title=getControllerMethodDescription2(joinPoint);
             } catch (Exception e) {
                 e.printStackTrace();
             }    
-            // ´òÓ¡JVMÐÅÏ¢¡£
-            long beginTime = beginTimeThreadLocal.get().getTime();//µÃµ½Ïß³Ì°ó¶¨µÄ¾Ö²¿±äÁ¿£¨¿ªÊ¼Ê±¼ä£©  
-            long endTime = System.currentTimeMillis();  //2¡¢½áÊøÊ±¼ä  
+            // ï¿½ï¿½Ó¡JVMï¿½ï¿½Ï¢ï¿½ï¿½
+            long beginTime = beginTimeThreadLocal.get().getTime();//ï¿½Ãµï¿½ï¿½ß³Ì°ó¶¨µÄ¾Ö²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ê±ï¿½ä£©  
+            long endTime = System.currentTimeMillis();  //2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½  
             if (logger.isDebugEnabled()){
-                logger.debug("Clock ends£º{}  URI: {}  Time comsumes£º {}s   Max Memory(-Xmx): {}m  Occupied Memory: {}m  Free Memory from Occupied: {}m  Max Available Memory: {}m",
+                logger.debug("Clock endsï¿½ï¿½{}  URI: {}  Time comsumesï¿½ï¿½ {}s   Max Memory(-Xmx): {}m  Occupied Memory: {}m  Free Memory from Occupied: {}m  Max Available Memory: {}m",
                         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(endTime), 
                         request.getRequestURI(), 
                         CommonUtils.timePeriod(endTime - beginTime), 
@@ -125,13 +122,13 @@ public class LogAspect {
             log.setOperateDate(operateDate);
             log.setTimeout(CommonUtils.timePeriod(endTime - beginTime));
 
-            //1.Ö±½ÓÖ´ÐÐ±£´æ²Ù×÷
+            //1.Ö±ï¿½ï¿½Ö´ï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             //this.logService.createSystemLog(log);
 
-            //2.ÓÅ»¯:Òì²½±£´æÈÕÖ¾
+            //2.ï¿½Å»ï¿½:ï¿½ì²½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
             //new SaveLogThread(log, logService).start();
 
-            //3.ÔÙÓÅ»¯:Í¨¹ýÏß³Ì³ØÀ´Ö´ÐÐÈÕÖ¾±£´æ
+            //3.ï¿½ï¿½ï¿½Å»ï¿½:Í¨ï¿½ï¿½ï¿½ß³Ì³ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 //            threadPoolTaskExecutor.execute(new SaveLogThread(log, logService));
             logThreadLocal.set(log);
         }
@@ -139,7 +136,7 @@ public class LogAspect {
     }
 
     /**
-     *  Òì³£Í¨Öª ¼ÇÂ¼²Ù×÷±¨´íÈÕÖ¾
+     *  ï¿½ì³£Í¨Öª ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
      * @param joinPoint
      * @param e
      */
@@ -152,8 +149,8 @@ public class LogAspect {
     }
 
     /**
-     * »ñÈ¡×¢½âÖÐ¶Ô·½·¨µÄÃèÊöÐÅÏ¢ ÓÃÓÚservice²ã×¢½â
-     * @param joinPointÇÐµã
+     * ï¿½ï¿½È¡×¢ï¿½ï¿½ï¿½Ð¶Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ ï¿½ï¿½ï¿½ï¿½serviceï¿½ï¿½×¢ï¿½ï¿½
+     * @param joinPointï¿½Ðµï¿½
      * @return discription
      */
 /*    public static String getServiceMthodDescription2(JoinPoint joinPoint) {
@@ -165,9 +162,9 @@ public class LogAspect {
     }*/
 
     /**
-     * »ñÈ¡×¢½âÖÐ¶Ô·½·¨µÄÃèÊöÐÅÏ¢ ÓÃÓÚController²ã×¢½â
+     * ï¿½ï¿½È¡×¢ï¿½ï¿½ï¿½Ð¶Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ ï¿½ï¿½ï¿½ï¿½Controllerï¿½ï¿½×¢ï¿½ï¿½
      * 
-     * @param joinPoint ÇÐµã
+     * @param joinPoint ï¿½Ðµï¿½
      * @return discription
      */
     public static String getControllerMethodDescription2(JoinPoint joinPoint) {
@@ -179,7 +176,7 @@ public class LogAspect {
     }
 
     /**
-     * ±£´æÈÕÖ¾Ïß³Ì
+     * ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ß³ï¿½
      */
   /*  private static class SaveLogThread implements Runnable {
         private Log log;
@@ -197,7 +194,7 @@ public class LogAspect {
     }*/
 
     /**
-     * ÈÕÖ¾¸üÐÂÏß³Ì
+     * ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½
      */
     /*private static class UpdateLogThread extends Thread {
         private Log log;

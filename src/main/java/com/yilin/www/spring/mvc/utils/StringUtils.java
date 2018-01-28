@@ -11,7 +11,6 @@ public class StringUtils {
 	}
 
 	public static Object abbr(Object object, int i) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
