@@ -11,12 +11,13 @@
 	default-lazy-init="true">
 
     <description>The application context configuration for Data Base.</description>
- <!--  
+ 	<!--  
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" scope="singleton" lazy-init="true">
 		<property name="jndiName">
 			<value>CCTRLDS_ORAAS</value>
 		</property>
-	</bean>  -->
+	</bean>  
+	-->
 	
 	<!-- for local-->   
 	<bean id="dataSource"

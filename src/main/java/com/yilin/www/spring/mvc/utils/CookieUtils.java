@@ -25,9 +25,20 @@ public class CookieUtils {
 	 * @param value - cookie value
 	 */
 	 public static void saveAsSimpleCookie(String name,String value, HttpServletResponse res){
-	    	Cookie cookie = new Cookie(name, value);  
-			 cookie.setPath("/");
-			 cookie.setMaxAge(-1);
-		     res.addCookie(cookie);
+		 Cookie cookie = new Cookie(name, value);  
+		 cookie.setMaxAge(30*60);
+	     res.addCookie(cookie);
+	 }
+	 
+	 /**
+	  * maxage set 0.
+	  * @param cookie - the one need to be deleted
+	  * @param res
+	  */
+	 public static void delete(Cookie cookie, HttpServletResponse res) { 
+		//if(cookie == null) throw new RuntimeException("Not found the cookie.");
+		cookie.setMaxAge(0); 
+		cookie.setValue(null); 
+		res.addCookie(cookie);
 	 }
 }

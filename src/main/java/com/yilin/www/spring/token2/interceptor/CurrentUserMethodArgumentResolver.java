@@ -1,4 +1,4 @@
-package com.yilin.www.spring.token2;
+package com.yilin.www.spring.token2.interceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -12,6 +12,7 @@ import org.springframework.web.multipart.support.MissingServletRequestPartExcept
 
 import com.yilin.www.spring.dao.StudentDao;
 import com.yilin.www.spring.mvc.utils.Constants;
+import com.yilin.www.spring.token2.CurrentUser;
 import com.yilin.www.spring.vo.Student;
 
  

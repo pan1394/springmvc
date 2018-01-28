@@ -2,73 +2,73 @@ package com.yilin.www.spring.mvc.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.yilin.www.spring.dao.StudentDao;
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
+import com.yilin.www.spring.mvc.model.ResultModel;
 import com.yilin.www.spring.token2.Authorization;
 import com.yilin.www.spring.vo.Student;
 
 @RestController
-@RequestMapping("/student")
 public class StudentController {
 
-	 Logger logger = LoggerFactory.getLogger(this.getClass());
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 	  
-	@Autowired(required=false) 
-	private HttpServletResponse res;
-	
 	@Autowired 
 	private StudentDao stud;
-	
-	public void setRes(HttpServletResponse res) {
-		this.res = res;
-	}
-
+	 
 	@Authorization
-	@GetMapping("/add/{studnetName}")
-	@SystemControllerLog(description="test_for_logsystem")
-	
-	public ResponseEntity<List<Student>> add(@PathVariable String studnetName){
-		 Student s = new Student();
-		 s.setName(studnetName);
-		 Long id = stud.enrollStudent(s);
-		 List<Student> show = stud.getStudent(id);
-		 logger.info("Enrolled one student: {}", show.toString());
-		 return new ResponseEntity<List<Student>>(show, HttpStatus.OK);  
+	@PutMapping("/students")
+	@SystemControllerLog(description="test_for_logsystem") 
+	public ResponseEntity<ResultModel> update(@RequestBody Student student){
+		 stud.updateSudent(student);
+		 logger.info("Enrolled one student: {}", student.toString());
+		 return new ResponseEntity<ResultModel>(ResultModel.ok(student), HttpStatus.OK);  
 	}
 	
+	@Authorization
+	@PostMapping("/students")
+	@SystemControllerLog(description="test_for_logsystem") 
+	public ResponseEntity<ResultModel> enroll(@RequestBody Student student){ 
+		 Long id = stud.enrollStudent(student);
+		 List<Student> enrolled = stud.getStudent(id);
+		 logger.info("Enrolled one student: {}", enrolled.toString());
+		 return new ResponseEntity<ResultModel>(ResultModel.ok(enrolled), HttpStatus.OK);  
+	}
 	
-	 @GetMapping(value="/show")  
+	 @Authorization
+	 @GetMapping(value="/students")  
 	 @SystemControllerLog(description="test_for_logsystem")
-	 @ApiOperation(value = "²éÑ¯ËùÓÐÑ§Éú", httpMethod = "GET", notes = "ÔÝÎÞ")
-	 public ResponseEntity<List<Student>> showAllStudents() {  
-		List<Student> show = stud.getAllStudent();
-		logger.info("Display all students: {}", show.toString());
-        return new ResponseEntity<List<Student>>(show, HttpStatus.OK);  
-	  }  
+	 @ApiOperation(value = "æŸ¥è¯¢æ‰€æœ‰å­¦ç”Ÿ", httpMethod = "GET", notes = "/students")
+	 public ResponseEntity<ResultModel> showAllStudents() {  
+		List<Student> all = stud.getAllStudents();
+		logger.info("Display all students: {}", all.toString());
+        return new ResponseEntity<ResultModel>(ResultModel.ok(all), HttpStatus.OK);  
+	 }  
 	 
-	 
-	 @GetMapping(value="/delete/{id}")  
+	 @Authorization
+	 @DeleteMapping(value="/students/{id}")  
 	 @SystemControllerLog(description="test_for_logsystem")
-	 public ResponseEntity<List<Student>> delete(@PathVariable Long id) { 
+	 public ResponseEntity<ResultModel> delete(@PathVariable Long id) { 
 		List<Student> show = stud.getStudent(id);
 		if(show.size() > 0){
 			stud.removeStudent(id);
 		}
 		logger.info("Display all students: {}", show.toString());
-        return new ResponseEntity<List<Student>>(show, HttpStatus.OK);  
-	  }  
+        return new ResponseEntity<ResultModel>(ResultModel.ok(show), HttpStatus.OK);  
+	 }  
 	 
-}
+} 

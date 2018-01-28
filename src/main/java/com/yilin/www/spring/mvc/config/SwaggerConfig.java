@@ -1,17 +1,18 @@
 package com.yilin.www.spring.mvc.config;
 
-import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
-import com.mangofactory.swagger.models.dto.ApiInfo;
-import com.mangofactory.swagger.plugin.EnableSwagger;
-import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
-import com.yilin.www.spring.mvc.aop.TimeConsumerAOP;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
+import com.mangofactory.swagger.models.dto.ApiInfo;
+import com.mangofactory.swagger.plugin.EnableSwagger;
+import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
 
 /**
  * Created by xiaohui on 2016/1/14.
@@ -19,10 +20,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @EnableSwagger
 @EnableWebMvc
+@PropertySource("classpath:resources.properties")
 public class SwaggerConfig {
 
     private SpringSwaggerConfig springSwaggerConfig;
 
+    @Autowired
+    private Environment env;
+    
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * Required to autowire SpringSwaggerConfig
@@ -43,6 +48,9 @@ public class SwaggerConfig {
     public SwaggerSpringMvcPlugin customImplementation()
     {
     	logger.info("SwaggerSpringMvcPlugin loaded");
+    	this.springSwaggerConfig.defaultSwaggerPathProvider().setApiResourcePrefix(env.getProperty("rest_prefix"));
+    	String basepath = this.springSwaggerConfig.defaultSwaggerPathProvider().getApplicationBasePath();
+    	logger.info("swagger base path : " + basepath);
         return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
                 .apiInfo(apiInfo());
                 //.includePatterns(".*?");
@@ -59,4 +67,5 @@ public class SwaggerConfig {
                 "My Apps API License URL");
         return apiInfo;
     }
+   
 }

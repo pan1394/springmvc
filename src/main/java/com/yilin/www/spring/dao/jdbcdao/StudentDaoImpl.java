@@ -51,7 +51,7 @@ public class StudentDaoImpl extends JdbcDaoSupport implements StudentDao {
 	}
 
 	@Override
-	public List<Student> getAllStudent() {
+	public List<Student> getAllStudents() {
 		StringBuffer sql = new StringBuffer("select * from student");
 		List<Student> one =  this.getJdbcTemplate().query(sql.toString(), new Object[]{}, new BeanPropertyRowMapper<Student>(Student.class));
 		return one;
@@ -64,5 +64,30 @@ public class StudentDaoImpl extends JdbcDaoSupport implements StudentDao {
 		return Id;
 	}
 
+	@Override
+	public Student getStudentByName(String name) {
+		StringBuffer sql = new StringBuffer("select * from student where name = ?");
+		List<Student> list =  this.getJdbcTemplate().query(sql.toString(), new Object[]{name}, new BeanPropertyRowMapper<Student>(Student.class));
+		if(list != null && list.size() == 1)
+			return list.get(0);
+		return null;
+	}
+
+	public Student getStudentById(Long Id) {
+		List<Student> list = this.getStudent(Id);
+		if(list != null && list.size() == 1)
+			return list.get(0);
+		return null;
+	}
+
+	@Override
+	public Student updateSudent(Student student) {
+		StringBuffer sql = new StringBuffer("update student set name=? where id=?");
+		int i = this.getJdbcTemplate().update(sql.toString(), student.getName(), student.getId());
+		if(i == 1)
+			return student;
+		return null;
+	}
+	
 	
 }

@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class WebExceptionHandler {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	
-	@SuppressWarnings({ "unchecked", "rawtypes", "deprecation" })
-	@ExceptionHandler({MySampleException.class})
-	public ResponseEntity handler(HttpServletRequest request, HttpServletResponse response, MySampleException e)
+	 
+	@SuppressWarnings({ "unchecked", "rawtypes"})
+	@ExceptionHandler({MySampleRuntimeException.class})
+	public ResponseEntity handler(HttpServletRequest request, HttpServletResponse response, MySampleRuntimeException e)
 			throws IOException {
 		logger.error("HttpRequest error:{}", request.getRequestURL());
         logger.error("HttpRequest error stack :" ,e );
-		return new ResponseEntity(e.getLocalizedMessage(),HttpStatus.METHOD_FAILURE);
+		return new ResponseEntity(e.getLocalizedMessage(),HttpStatus.SERVICE_UNAVAILABLE);
 	}
 }

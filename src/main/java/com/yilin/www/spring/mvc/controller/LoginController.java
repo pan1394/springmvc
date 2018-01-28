@@ -78,11 +78,9 @@ public class LoginController {
 	 public ResponseEntity<String> logout() {  
 		Cookie[] cks = req.getCookies();
 		Cookie cookie = CookieUtils.getCookieByName("psessionId",cks);
-		cookie.setMaxAge(-1);
-		cookie.setValue(null);
 		String token = cookie.getValue();
 		tokenManager.delete(token);
-		res.addCookie(cookie);
+		CookieUtils.delete(cookie, res);
 		//logger.info("Display all students: {}", show.toString());
         return new ResponseEntity<String>("you loged out.", HttpStatus.OK);  
 	  }  

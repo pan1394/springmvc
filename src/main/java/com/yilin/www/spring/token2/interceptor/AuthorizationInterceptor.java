@@ -1,8 +1,7 @@
-package com.yilin.www.spring.token2.intercept;
+package com.yilin.www.spring.token2.interceptor;
 
 import java.lang.reflect.Method;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,7 +11,6 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.yilin.www.spring.mvc.utils.Constants;
-import com.yilin.www.spring.mvc.utils.CookieUtils;
 import com.yilin.www.spring.token2.Authorization;
 import com.yilin.www.spring.token2.TokenManager;
 import com.yilin.www.spring.token2.TokenModel;
@@ -39,14 +37,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Method method = handlerMethod.getMethod();
-        //从header中得到token
-       /* String authorization = request.getHeader(Constants.AUTHORIZATION);
-        if(authorization == null){
-        	 Cookie[] cookies = request.getCookies();
-        	 Cookie cookie = CookieUtils.getCookieByName(Constants.AUTHORIZATION, cookies);
-        	 authorization = cookie==null? null : cookie.getValue();
-        }*/
+        Method method = handlerMethod.getMethod(); 
         String authorization = authFacade.getAuthorizationToken(request);
         //验证token
         TokenModel model = manager.getToken(authorization);

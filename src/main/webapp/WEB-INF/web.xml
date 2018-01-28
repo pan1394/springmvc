@@ -4,8 +4,13 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 	<display-name>SPRING</display-name> 
-	
+	 <welcome-file-list>
+	 	<!-- redirect to static page swagger ui -->
+        <welcome-file>index</welcome-file> 
+    </welcome-file-list>
+    
 	<context-param>  
+		<!-- root spring context -->
         <param-name>contextConfigLocation</param-name>  
         <param-value>/WEB-INF/spring-context.xml</param-value>  
     </context-param>  
@@ -16,15 +21,15 @@
 	<servlet>
 		<servlet-name>mvc</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<!--  default load <servlet-name>-servlet  -->
+		<!--default load mvc servlet name: /WEB-INF/<servlet-name>-servlet.xml  -->
 		<load-on-startup>1</load-on-startup>
 	</servlet>  
 	<servlet-mapping>
 	    <servlet-name>mvc</servlet-name>
 	    <url-pattern>/spring/*</url-pattern>
-	</servlet-mapping> 
-	 
-	 <welcome-file-list>
-        <welcome-file>/swagger/index.html</welcome-file> 
-    </welcome-file-list>
+	</servlet-mapping>  
+	<servlet-mapping>
+	    <servlet-name>mvc</servlet-name>
+	    <url-pattern>/index</url-pattern>
+	</servlet-mapping>  
 </web-app>

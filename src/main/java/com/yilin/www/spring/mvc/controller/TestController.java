@@ -21,37 +21,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.yilin.www.spring.mvc.derby.DerbyDB;
-import com.yilin.www.spring.mvc.exceptions.MySampleException;
+import com.yilin.www.spring.mvc.exceptions.MySampleRuntimeException;
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
+import com.yilin.www.spring.mvc.model.ResultModel;
 import com.yilin.www.spring.mvc.utils.UUIDUtils;
 
 @RestController
 public class TestController {
 
-	 Logger logger = LoggerFactory.getLogger(this.getClass());
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 	  
-	@Autowired(required=false) 
+	@Autowired 
 	private HttpServletResponse res;
-	
-	public void setRes(HttpServletResponse res) {
-		this.res = res;
-	}
-
-
+  
 	@GetMapping("/hello/{name}")
 	@SystemControllerLog(description="test_for_logsystem")
-	public String helloWorld(@PathVariable String name){
+	public ResponseEntity<ResultModel> helloWorld(@PathVariable String name){
 		try {
 			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		} catch (InterruptedException e) { 
 			e.printStackTrace();
 		}
-		return new StringBuffer("Hello, Welcome my friend ").append(name).toString();
+		ResultModel body = ResultModel.ok(new StringBuilder("Hello, Welcome my friend ").append(name).toString()); 
+		return new ResponseEntity<ResultModel>(body, HttpStatus.OK);
 	}
 	
 	
 	 @PostMapping(value="/response/headers")  
+	 @SystemControllerLog(description="test_for_logsystem")
 	 public ResponseEntity<String> responseEntityCustomHeaders() {  
         HttpHeaders headers = new HttpHeaders();   
         
@@ -62,24 +59,32 @@ public class TestController {
         return new ResponseEntity<String>("The String ResponseBody with custom header Content-Type=text/plain", headers, HttpStatus.OK);  
 	  }  
 	 
+	 /**
+	  * MySampleRuntimeException is captured by handler in {@link WebExceptionHandler#handler}
+	  * @return
+	  * @throws MySampleRuntimeException
+	  */
 	 @SuppressWarnings("unused")
 	 @GetMapping(value="/throwable")  
-	 public ResponseEntity<String> throwException() throws MySampleException {
+	 @SystemControllerLog(description="test_for_logsystem")
+	 public ResponseEntity<ResultModel> methodThrowsException() throws MySampleRuntimeException{
 		if(true){
-			throw new MySampleException("my exception");
+			throw new MySampleRuntimeException("my custom run time exception");
 		}
-        return new ResponseEntity<String>("I cannot be reached", HttpStatus.OK);  
-	  } 
+		String returnValue = "I cannot be reached"; 
+        return new ResponseEntity<ResultModel>(ResultModel.ok(returnValue), HttpStatus.OK);  
+	 } 
 	 
-	 	@Autowired DerbyDB db;
-	 	@GetMapping("/initDB")
-		@SystemControllerLog(description="test_for_logsystem")
-		public String initDB() throws IOException{
-	 		Resource resource = new ClassPathResource("sample.sql");
-	 		File f = resource.getFile(); 
-	 		String table = "token_t";
-	 		logger.info("check..."); 
-	 		db.init(f,  table);  
-			return new StringBuffer("done ").toString();
-		}
+	 
+ 	@Autowired DerbyDB db;
+ 	@GetMapping("/initDB")
+	@SystemControllerLog(description="test_for_logsystem")
+	public String initDB() throws IOException{
+ 		Resource resource = new ClassPathResource("sample.sql");
+ 		File f = resource.getFile(); 
+ 		String table = "token_t";
+ 		logger.info("check..."); 
+ 		db.init(f,  table);  
+		return new StringBuffer("done ").toString();
+	}
 }

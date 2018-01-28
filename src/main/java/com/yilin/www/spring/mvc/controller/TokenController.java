@@ -3,13 +3,14 @@ package com.yilin.www.spring.mvc.controller;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +22,6 @@ import com.yilin.www.spring.mvc.model.ResultModel;
 import com.yilin.www.spring.mvc.utils.Constants;
 import com.yilin.www.spring.mvc.utils.CookieUtils;
 import com.yilin.www.spring.token2.Authorization;
-import com.yilin.www.spring.token2.CurrentUser;
 import com.yilin.www.spring.token2.TokenManager;
 import com.yilin.www.spring.token2.TokenModel;
 import com.yilin.www.spring.vo.Student;
@@ -42,10 +42,13 @@ public class TokenController {
     private TokenManager tokenManager;
 
     @Autowired
-    private HttpServletResponse res;
+    private HttpServletRequest req;
+    
+    @Autowired
+    private HttpServletResponse resp;
     
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity login(@RequestParam Long userId, @RequestParam String password) {
+    public ResponseEntity<ResultModel> login(@RequestParam Long userId, @RequestParam String password) {
         Assert.notNull(userId, "username can not be empty");
         Assert.notNull(password, "password can not be empty");
 
@@ -55,22 +58,21 @@ public class TokenController {
                 user.size() != 1
         		) {  //密码错误
             //提示用户名或密码错误
-            return new ResponseEntity<>(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.NOT_FOUND);
         }
         //生成一个token，保存用户登录状态
         TokenModel model = tokenManager.createToken(userId);
-        CookieUtils.saveAsSimpleCookie(Constants.AUTHORIZATION, model.toString(), res);
-        return new ResponseEntity<>(ResultModel.ok(model), HttpStatus.OK);
+        CookieUtils.saveAsSimpleCookie(Constants.AUTHORIZATION, model.toString(), resp);
+        return new ResponseEntity<ResultModel>(ResultModel.ok(model), HttpStatus.OK);
     }
 
-    //@RequestMapping(method = RequestMethod.DELETE)
-    @GetMapping("/delete")
     @Authorization
-    public ResponseEntity logout(@CurrentUser Student user) {
+    @RequestMapping(method = RequestMethod.DELETE) 
+    public ResponseEntity<ResultModel> logout(@RequestBody Student user) {
         tokenManager.deleteToken(user.getId());
-        return new ResponseEntity<>(ResultModel.ok(), HttpStatus.OK);
+        Cookie cookie =  CookieUtils.getCookieByName(Constants.AUTHORIZATION, req.getCookies());
+        CookieUtils.delete(cookie, resp); 
+        return new ResponseEntity<ResultModel>(ResultModel.ok(), HttpStatus.OK);
     }
-
-    
-   
+ 
 }

@@ -16,15 +16,14 @@
 
     <context:component-scan base-package="com.yilin.www.spring" />  
     <aop:aspectj-autoproxy />
+    
     <bean id="contentNegotiationManager"
              class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
        	<property name="defaultContentType" value="application/json" />
-  	</bean>
-  
+  	</bean> 
  	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager"/>
  	 
  	 
-	
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
 			<list>
@@ -32,9 +31,7 @@
 			</list>
 		</property>
 	</bean>
- 
   
- 
      <tx:annotation-driven transaction-manager="transactionManager" /> 
        
       
