@@ -27,8 +27,7 @@ import com.yilin.www.spring.mvc.model.ResultModel;
 import com.yilin.www.spring.mvc.utils.UUIDUtils;
 import com.yilin.www.spring.token2.CurrentUser;
 import com.yilin.www.spring.vo.Student;
-
-import jdk.internal.jline.internal.Log;
+ 
 
 @RestController
 public class TestController {

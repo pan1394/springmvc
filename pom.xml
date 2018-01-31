@@ -77,7 +77,11 @@
 			<version>${spring.version}</version> 
 		</dependency>
 		
-		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version> 
+		</dependency>
 		
 		 
         <dependency>  
@@ -189,6 +193,20 @@
 	        <version>2.4</version>  
 	        <classifier>jdk15</classifier>   
 	    </dependency>  
+	    
+	    
+	    <!-- hibernate -->
+	    <dependency> 
+			<groupId>org.hibernate</groupId> 
+			<artifactId>hibernate-core</artifactId> 
+			<version>5.2.1.Final</version> 
+			<exclusions> 
+				<exclusion> 
+					<artifactId>el-api</artifactId> 
+					<groupId>javax.el</groupId> 
+				</exclusion> 
+			</exclusions> 
+		</dependency> 
   </dependencies>
       
      
