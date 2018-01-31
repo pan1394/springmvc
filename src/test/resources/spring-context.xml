@@ -10,12 +10,12 @@
 						http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.2.xsd"
 	default-lazy-init="false">
 
-    <description>The Root application context configuration</description>
+    <description>The Root application context configuration</description> 
     <context:component-scan base-package="com.yilin.www.spring" /> 
   	<context:property-placeholder location="classpath:resources.properties"/>
   
   	<tx:annotation-driven transaction-manager="transactionManager" /> 
-  	<import resource="./derby-context.xml" />
-  	<import resource="./spring-redis.xml" />
   	
+  	<import resource="./spring-redis.xml" />
+  	<import resource="./derby-context.xml" />
 </beans>

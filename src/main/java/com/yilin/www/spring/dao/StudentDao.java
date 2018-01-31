@@ -5,7 +5,7 @@ import java.util.List;
 import com.yilin.www.spring.vo.Student;
 
 
-public interface StudentDao {
+public interface StudentDao{
 
 	public List<Student> getStudent(Long Id);
 	public Long enrollStudent(Student student);

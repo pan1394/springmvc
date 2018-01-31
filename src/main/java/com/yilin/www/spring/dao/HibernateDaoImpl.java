@@ -4,24 +4,44 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource; 
+
+import org.apache.commons.beanutils.PropertyUtils;
 import org.hibernate.Criteria;
 import org.hibernate.LockMode;
-import org.hibernate.query.Query;
-import org.hibernate.query.NativeQuery;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
-
+@SuppressWarnings({"rawtypes","unchecked"})
+@Resource
 public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> extends HibernateDaoSupport implements BaseDao<T, PK> {
-
-  
+ 
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	 
 	private Class<T> clazz;
+	 
+	@Autowired 
+	public void setSf( SessionFactory sessionFactory) {
+		super.setSessionFactory(sessionFactory);
+		logger.info("sessionFactory loaded for HibernateDaoImpl.");
+	} 
 	
 	public HibernateDaoImpl() {  
 	        this.clazz = null;  
@@ -55,11 +75,16 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
 	}
 
 	@Override
-	public void save(T entity) {
-		getHibernateTemplate().save(entity);
+	public PK save(T entity) {
+		return (PK) getHibernateTemplate().save(entity);
 		
 	}
 
+	@Override
+	public void saveOrUpdate(T entity) {
+		getHibernateTemplate().saveOrUpdate(entity);
+	}
+	
 	@Override
 	public void delete(T entity) {
 		getHibernateTemplate().delete(entity);
@@ -67,7 +92,7 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
 	}
 
 	@Override
-	public void deleteById(Class<T> clazz, PK id) {
+	public void deleteById(PK id) {
 		getHibernateTemplate().delete(this.findById(id)); 
 	}
 
@@ -116,8 +141,9 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
     }  
 	  
 	@Override
-	public List findByCriteria(DetachedCriteria criteria) {  
-	    return getHibernateTemplate().findByCriteria(criteria);  
+	public List findByCriteria(DetachedCriteria criteria) {   
+		return getHibernateTemplate().findByCriteria(criteria);  
+	    
 	}  
 	  
 	 
@@ -130,7 +156,7 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
 	@Override
 	public long getRowCount(DetachedCriteria criteria) {
 		 criteria.setProjection(Projections.rowCount());  
-	     List list = this.findByCriteria(criteria);  
+	     List list = this.findByCriteria(criteria,0,1);  
 	     return (Long) list.get(0);  
 	}
 
@@ -150,7 +176,7 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
 	public List findByHQLCache(String HQL) { 
 		return this.getHibernateTemplate().execute(session ->{
 				Query query = session.createQuery(HQL);
-				return query.setCacheable(true).list();
+				return query.setCacheable(true).getResultList();
 		});
 	}
 
@@ -158,24 +184,17 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
 	public List findByNSQL(String SQL) {
 		return this.getHibernateTemplate().execute( session -> {  
                 NativeQuery query = session.createNativeQuery(SQL);  
-                return query.list();  
+                return query.getResultList();
 	    });    
 	}
 
- 
-  
- /* 
-  
-  
-    // -------------------------------- Criteria ------------------------------  
- 
-  
-    public List<T> findEqualByEntity(T entity, String[] propertyNames) {  
-        Criteria criteria = this.createCriteria();  
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<T> findEqualByEntity(T entity, String... propertyNames) {
+		Criteria criteria = this.createCriteria();  
         Example exam = Example.create(entity);  
         exam.excludeZeroes();  
-        String[] defPropertys = getSessionFactory().getClassMetadata(  
-                entityClass).getPropertyNames();  
+        String[] defPropertys = this.getSessionFactory().getClassMetadata(clazz).getPropertyNames();  
         for (String defProperty : defPropertys) {  
             int ii = 0;  
             for (ii = 0; ii < propertyNames.length; ++ii) {  
@@ -190,47 +209,62 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
         }  
         criteria.add(exam);  
         return (List<T>) criteria.list();  
-    }  
-  
-    public List<T> findLikeByEntity(T entity, String[] propertyNames) {  
-        Criteria criteria = this.createCriteria();  
-        for (String property : propertyNames) {  
-            try {  
+	}
+
+	@Override
+	public List<T> findLikeByEntity(T entity, String... propertyNames) {
+		Criteria criteria = this.createCriteria();  
+		Arrays.asList(propertyNames).forEach(property -> {
+			try {  
                 Object value = PropertyUtils.getProperty(entity, property);  
                 if (value instanceof String) {  
-                    criteria.add(Restrictions.like(property, (String) value,  
-                            MatchMode.ANYWHERE));  
+                    criteria.add(Restrictions.like(property, (String) value, MatchMode.ANYWHERE));  
                     criteria.addOrder(Order.asc(property));  
                 } else {  
                     criteria.add(Restrictions.eq(property, value));  
                     criteria.addOrder(Order.asc(property));  
                 }  
             } catch (Exception ex) {  
-            }  
-        }  
+            	logger.error(ex.getLocalizedMessage(), ex);
+            } 
+		});  
         return (List<T>) criteria.list();  
-    }  
-  
+	}
+
+	@Override
+	public List<T> findByPageParam(int currPage, LinkedHashMap args) {
+		return null;
+	}
+
+	@Override
+	public Object getStateValue(DetachedCriteria criteria, String propertyName, State s) {
+		switch(s) { 
+			case MAX:criteria.setProjection(Projections.max(propertyName));
+					break;
+			case MIN:criteria.setProjection(Projections.min(propertyName));
+					break;
+			case AVG:criteria.setProjection(Projections.avg(propertyName));
+					break;
+			case SUM:criteria.setProjection(Projections.sum(propertyName));
+					break;
+			default:
+				break;  
+		} 
+		return this.findByCriteria(criteria,0,1).get(0);
+	}
+
  
+	public static enum State{
+		MAX,
+		MIN,
+		AVG,
+		SUM
+	}
+ /* 
   
-    public Object getStatValue(DetachedCriteria criteria, String propertyName,  
-            String StatName) {  
-        if (StatName.toLowerCase().equals("max"))  
-            criteria.setProjection(Projections.max(propertyName));  
-        else if (StatName.toLowerCase().equals("min"))  
-            criteria.setProjection(Projections.min(propertyName));  
-        else if (StatName.toLowerCase().equals("avg"))  
-            criteria.setProjection(Projections.avg(propertyName));  
-        else if (StatName.toLowerCase().equals("sum"))  
-            criteria.setProjection(Projections.sum(propertyName));  
-        else  
-            return null;  
-        List list = this.findByCriteria(criteria, 0, 1);  
-        return list.get(0);  
-    }  
   
-    // -------------------------------- Others --------------------------------  
-  
+    // -------------------------------- Criteria ------------------------------  
+   
   
     public List<T> findByPageParam(final int currPage,final LinkedHashMap args) {  
         final int currPate = currPage*1;  
@@ -248,40 +282,10 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
         for (Iterator iter = map.values().iterator(); iter.hasNext();) {  
             String value = (String) iter.next();  
             paramlist.add(value);  
-        }  
-          
-        List list = this.getHibernateTemplate().executeFind(  
-                new HibernateCallback() {  
-                    public Object doInHibernate(Session session)  
-                    throws HibernateException, SQLException {  
-                        Query query = session.createQuery(hql);  
-                        for (int i = 0; i < paramlist.size(); i++) {  
-                            query.setParameter(i, paramlist.get(i));  
-                        }  
-                        List result = query.setFirstResult(currPage > 1 ? (currPage - 1) * 15: 0).setMaxResults(15).list();  
-                        return result;  
-                    }  
-                });  
-        return list;  
+        }   
     }  
       
-       
-  
-  
-  
-    public static Object getBean(String beanName) {  
-        String[] str = {"WebRoot/WEB-INF/applicationContext.xml"};  
-        ApplicationContext ctx = new FileSystemXmlApplicationContext(str);  
-        try {  
-            return ctx.getBean(beanName);  
-        } catch (Exception e) {  
-            System.out.println(e);  
-            System.out.println("?...");  
-        }  
-        return null;  
-  
-    }  
-  
+ 
   
    */
 }  

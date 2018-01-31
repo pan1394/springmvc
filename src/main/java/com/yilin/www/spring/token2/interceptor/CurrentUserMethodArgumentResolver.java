@@ -1,6 +1,7 @@
 package com.yilin.www.spring.token2.interceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -25,6 +26,7 @@ import com.yilin.www.spring.vo.Student;
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Autowired
+    @Qualifier("studentDao2")
     private StudentDao userRepository;
 
     @Override

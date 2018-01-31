@@ -2,9 +2,12 @@ package com.yilin.www.spring.mvc.controller;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +30,8 @@ public class StudentController {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	  
-	@Autowired 
+	@Autowired
+	@Qualifier("studentDao2")
 	private StudentDao stud;
 	 
 	@Authorization

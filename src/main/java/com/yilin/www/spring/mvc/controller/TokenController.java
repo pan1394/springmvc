@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -42,6 +43,7 @@ public class TokenController {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
     @Autowired
+    @Qualifier("studentDao2")
     private StudentDao userRepository;
 
     @Autowired
