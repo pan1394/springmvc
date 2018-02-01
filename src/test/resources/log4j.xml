@@ -70,6 +70,11 @@
         <appender-ref ref="DailyRollingFileAppender"/>
     </logger>
  
+ 	<logger name="org.hibernate.cache" additivity="true" >
+		<level value="DEBUG"/>
+		<appender-ref ref="ConsoleAppender"/> 
+	</logger>
+	
     <!-- 根logger的设置-->
     <root>
         <level value ="INFO"/>

@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
+import com.google.common.base.Optional;
+
 @SuppressWarnings({"rawtypes","unchecked"})
 @Resource
 public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> extends HibernateDaoSupport implements BaseDao<T, PK> {
@@ -162,6 +164,8 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
 
 	@Override
 	public long getCount(LinkedHashMap args) {
+		Optional<LinkedHashMap> opt = Optional.fromNullable(args);
+		args = opt.or(new LinkedHashMap());
 		final Map map = args;  
         StringBuffer sql = new StringBuffer( "select count(entity) from "+ clazz.getName()+" entity where 1 =1 ");
         map.keySet().forEach(key -> sql.append(" and "+key+" ? "));  
@@ -175,7 +179,7 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
 	@Override
 	public List findByHQLCache(String HQL) { 
 		return this.getHibernateTemplate().execute(session ->{
-				Query query = session.createQuery(HQL);
+				Query query = session.createQuery(HQL);  
 				return query.setCacheable(true).getResultList();
 		});
 	}
@@ -232,7 +236,7 @@ public class HibernateDaoImpl<T extends Serializable, PK extends Serializable> e
 	}
 
 	@Override
-	public List<T> findByPageParam(int currPage, LinkedHashMap args) {
+	public List<T> findByPageParam(int currPage, LinkedHashMap args) { 
 		return null;
 	}
 
