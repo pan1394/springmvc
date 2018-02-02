@@ -39,7 +39,7 @@
         timeToIdleSeconds="120"  
         timeToLiveSeconds="120"  
         overflowToDisk="true"  
-        />  
+        />
   
     <!--Predefined caches.  Add your cache configuration settings here.  
         If you do not have a configuration for your cache a WARNING will be issued when the  
@@ -70,13 +70,13 @@
         defined on your system. On a standard Linux system this will be /tmp"  
         -->  
     <!-- 具体到某个类的数据过期策略 -->  
-    <cache name="com.yilin.www.spring.vo.Student"  
+<!--    <cache name="com.yilin.www.spring.vo.Student"  
         maxElementsInMemory="10000"  
         eternal="false"  
         timeToIdleSeconds="300"  
         timeToLiveSeconds="600"  
         overflowToDisk="true"  
-        />  
+        />   -->  
   
     <cache name="org.hibernate.cache.spi.UpdateTimestampsCache"
 	    maxElementsInMemory="5000" 

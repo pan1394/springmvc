@@ -21,7 +21,7 @@ public class StudentDaoImplTest extends BaseDaoFramework{
 	
 	@Before
 	public void setup() {
-		logger.info("before loaded for StudentDaoImplTest.");
+	/*	logger.info("before loaded for StudentDaoImplTest.");
 		Student entity = new Student();
 	    entity.setName("Peter");
 		dao.save(entity);
@@ -31,7 +31,7 @@ public class StudentDaoImplTest extends BaseDaoFramework{
 	    Student entity3 = new Student();
 	    entity3.setName("Lucy");
 	    dao.save(entity3); 
-	    dao.flush(); 
+	    dao.flush(); */
 	}
 	
 	@Test 
@@ -72,15 +72,15 @@ public class StudentDaoImplTest extends BaseDaoFramework{
 	}
 	
 	@Test
-	public void queryOut(){
-		/*List lst = dao.loadAll(); 
+	public void queryOut(){ 
+		List lst = dao.loadAll(); 
 		logger.info("session online resultset: ");
 		//lst.forEach(s -> logger.info(s.toString()));
 		logger.info("===============================================");
 		List lst2 = dao.findByCriteria(dao.createDetachedCriteria());
 		logger.info("session offline resultset: ");
 		//lst2.forEach(s -> logger.info(s.toString()));
-		logger.info("===============================================");*/
+		logger.info("===============================================");
 		logger.info("start query cache resultset: ");
 		List lst3 =dao.findByHQLCache("from Student");
 		//lst3.forEach(s -> logger.info(s.toString()));

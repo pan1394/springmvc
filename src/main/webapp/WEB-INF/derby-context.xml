@@ -22,7 +22,7 @@
 	<!-- for local-->   
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource"> 
-		<property name="driverClassName" value="org.apache.derby.jdbc.EmbeddedDriver" />
+		<property name="driverClassName" value="${db_driver}" />
 		<property name="url" value="jdbc:derby:${db_path};create=true" />
 		<property name="username" value="root" />
 		<property name="password" value="root" />
@@ -33,14 +33,25 @@
         <property name="packagesToScan" value="com.yilin.www.spring.vo" />
         <property name="hibernateProperties">
             <props>
-                <!-- <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop> --> <!--hibernate根据实体自动生成数据库表-->
+              <!--   <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop> --> <!--hibernate根据实体自动生成数据库表-->
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>   <!--指定数据库方言-->
                 <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>     <!--在控制台显示执行的数据库操作语句-->
                 <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>     <!--在控制台显示执行的数据哭操作语句（格式）-->
+                <prop key="hibernate.cache.use_query_cache">true</prop> 
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop> 
+  				<!-- <prop key="hibernate.cache.provider_class">net.sf.ehcache.hibernate.EhCacheProvider</prop> -->
+  				<prop key="hibernate.cache.use_second_level_cache">true</prop>
+  				<prop key="hibernate.generate_statistics">true</prop>  
             </props>
         </property>
     </bean>
     
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <tx:annotation-driven transaction-manager="transactionManager" /> 
+      	
 	<!-- <bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.WebSphereNativeJdbcExtractor" />  -->
 	
 	<bean id="simpleJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
