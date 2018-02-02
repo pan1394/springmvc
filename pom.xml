@@ -223,6 +223,14 @@
         <artifactId>jaxb-core</artifactId>
         <version>2.3.0</version>
     </dependency>
+    
+    <!-- cache for hibernate -->
+	<dependency>
+	    <groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-ehcache</artifactId>
+	    <version>5.2.1.Final</version>
+	</dependency>    
   </dependencies>
+  
        
 </project>
