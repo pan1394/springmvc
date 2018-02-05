@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.yilin.www.spring.dao.StudentDao;
+import com.yilin.www.spring.entity.Student;
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
 import com.yilin.www.spring.mvc.model.ResultModel;
 import com.yilin.www.spring.token2.Authorization;
-import com.yilin.www.spring.vo.Student;
 
 @RestController
 @Transactional

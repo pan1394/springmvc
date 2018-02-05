@@ -1,4 +1,4 @@
-package com.yilin.www.spring.vo;
+package com.yilin.www.spring.entity;
 
 import java.io.Serializable;
 
@@ -16,12 +16,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 //@Cacheable
-//@Table(name = "Student")
+@Table(name = "Student")
 public class Student implements Serializable {
  
 	private static final long serialVersionUID = 1L;
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)  
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  
 	long id;
 	
 	@Column(name = "name")

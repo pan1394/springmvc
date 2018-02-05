@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yilin.www.spring.dao.BaseDao;
 import com.yilin.www.spring.dao.HibernateDaoImpl.State;
-import com.yilin.www.spring.vo.Student;
+import com.yilin.www.spring.entity.Student;
 @Transactional(readOnly=false)
 public class StudentDaoImplTest extends BaseDaoFramework{
 

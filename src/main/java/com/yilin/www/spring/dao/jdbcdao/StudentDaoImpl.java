@@ -11,7 +11,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
 
 import com.yilin.www.spring.dao.StudentDao;
-import com.yilin.www.spring.vo.Student;
+import com.yilin.www.spring.entity.Student;
 @Component
 public class StudentDaoImpl extends JdbcDaoSupport implements StudentDao {
 

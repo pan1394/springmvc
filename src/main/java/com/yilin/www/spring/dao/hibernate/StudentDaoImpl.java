@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.yilin.www.spring.dao.HibernateDaoImpl;
 import com.yilin.www.spring.dao.StudentDao;
-import com.yilin.www.spring.vo.Student;
+import com.yilin.www.spring.entity.Student;
 @Component(value="studentDao2")
 public class StudentDaoImpl extends HibernateDaoImpl<Student, Long> implements StudentDao {
 

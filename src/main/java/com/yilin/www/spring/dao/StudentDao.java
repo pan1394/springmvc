@@ -2,7 +2,7 @@ package com.yilin.www.spring.dao;
 
 import java.util.List;
 
-import com.yilin.www.spring.vo.Student;
+import com.yilin.www.spring.entity.Student;
 
 
 public interface StudentDao{

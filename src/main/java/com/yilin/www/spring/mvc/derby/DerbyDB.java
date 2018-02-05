@@ -88,9 +88,12 @@ public class DerbyDB {
 	        return set.contains(tableName.toUpperCase()) ;  
 	  } 
 	  
+	  public void batchUpdate(File sqlFile) {
+		  this.jdbcTemplate.batchUpdate(this.loadSql(sqlFile));
+	  }
 	  public boolean init(File sqlFile, String tableName){
 		  if(!this.isTableExist(tableName)){
-			  this.jdbcTemplate.batchUpdate(this.loadSql(sqlFile));
+			  this.batchUpdate(sqlFile);
 		  }
 		  return true;
 	  }

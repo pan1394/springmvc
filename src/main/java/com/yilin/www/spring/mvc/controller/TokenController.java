@@ -28,7 +28,7 @@ import com.yilin.www.spring.token2.Authorization;
 import com.yilin.www.spring.token2.CurrentUser;
 import com.yilin.www.spring.token2.TokenManager;
 import com.yilin.www.spring.token2.TokenModel;
-import com.yilin.www.spring.vo.Student;
+import com.yilin.www.spring.entity.Student;
  
 
 /**
@@ -61,14 +61,14 @@ public class TokenController {
         Assert.notNull(password, "password can not be empty");
 
         List< Student> user = userRepository.getStudent((userId));
-        if (user == null ||  //鏈敞鍐�
+        if (user == null ||  //閺堫亝鏁為崘锟�
                 //!user.getPassword().equals(password)
                 user.size() != 1
-        		) {  //瀵嗙爜閿欒
-            //鎻愮ず鐢ㄦ埛鍚嶆垨瀵嗙爜閿欒
+        		) {  //鐎靛棛鐖滈柨娆掝嚖
+            //閹绘劗銇氶悽銊﹀煕閸氬秵鍨ㄧ�靛棛鐖滈柨娆掝嚖
             return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.NOT_FOUND);
         }
-        //鐢熸垚涓�涓猼oken锛屼繚瀛樼敤鎴风櫥褰曠姸鎬�
+        //閻㈢喐鍨氭稉锟芥稉鐚紀ken閿涘奔绻氱�涙鏁ら幋椋庢瑜版洜濮搁幀锟�
         TokenModel model = tokenManager.createToken(userId);
         CookieUtils.saveAsSimpleCookie(Constants.AUTHORIZATION, model.toString(), resp);
         return new ResponseEntity<ResultModel>(ResultModel.ok(model), HttpStatus.OK);

@@ -12,9 +12,9 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import com.yilin.www.spring.dao.StudentDao;
+import com.yilin.www.spring.entity.Student;
 import com.yilin.www.spring.mvc.utils.Constants;
 import com.yilin.www.spring.token2.CurrentUser;
-import com.yilin.www.spring.vo.Student;
 
  
 /**

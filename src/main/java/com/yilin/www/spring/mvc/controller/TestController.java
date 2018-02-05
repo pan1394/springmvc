@@ -15,18 +15,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yilin.www.spring.entity.Student;
 import com.yilin.www.spring.mvc.derby.DerbyDB;
 import com.yilin.www.spring.mvc.exceptions.MySampleRuntimeException;
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
 import com.yilin.www.spring.mvc.model.ResultModel;
 import com.yilin.www.spring.mvc.utils.UUIDUtils;
 import com.yilin.www.spring.token2.CurrentUser;
-import com.yilin.www.spring.vo.Student;
  
 
 @RestController
@@ -88,7 +89,7 @@ public class TestController {
 	 
 	 
  	@Autowired DerbyDB db;
- 	@GetMapping("/initDB")
+ 	@GetMapping("/derbydb")
 	@SystemControllerLog(description="test_for_logsystem")
 	public String initDB() throws IOException{
  		Resource resource = new ClassPathResource("sample.sql");
@@ -96,6 +97,16 @@ public class TestController {
  		String table = "token_t";
  		logger.info("check..."); 
  		db.init(f,  table);  
+		return new StringBuffer("done ").toString();
+	}
+ 	 
+ 	@DeleteMapping("/derbydb")
+	@SystemControllerLog(description="test_for_logsystem")
+	public String deleteDB() throws IOException{
+ 		Resource resource = new ClassPathResource("sample2.sql");
+ 		File f = resource.getFile(); 
+ 		logger.info("delete ..."); 
+ 		db.batchUpdate(f);  
 		return new StringBuffer("done ").toString();
 	}
 }
