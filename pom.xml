@@ -229,7 +229,14 @@
 	    <groupId>org.hibernate</groupId>
 	    <artifactId>hibernate-ehcache</artifactId>
 	    <version>5.2.1.Final</version>
-	</dependency>    
+	</dependency>  
+	
+	<!--ehcache-->
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>3.3.1</version>
+        </dependency>  
   </dependencies>
   
        
