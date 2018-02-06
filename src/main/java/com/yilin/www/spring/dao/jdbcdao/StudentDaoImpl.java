@@ -5,6 +5,8 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -12,11 +14,14 @@ import org.springframework.stereotype.Component;
 
 import com.yilin.www.spring.dao.StudentDao;
 import com.yilin.www.spring.entity.Student;
+import com.yilin.www.spring.mvc.aop.TimeConsumerAOP;
 @Component
 public class StudentDaoImpl extends JdbcDaoSupport implements StudentDao {
 
 	private ReentrantLock lock = new ReentrantLock();
 
+	private  Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Autowired 
 	public void setDs(DataSource dataSource) {
 	    setDataSource(dataSource);
@@ -53,6 +58,7 @@ public class StudentDaoImpl extends JdbcDaoSupport implements StudentDao {
 	@Override
 	public List<Student> getAllStudents() {
 		StringBuffer sql = new StringBuffer("select * from student");
+		logger.info("jdbc sql :{}" , sql.toString());
 		List<Student> one =  this.getJdbcTemplate().query(sql.toString(), new Object[]{}, new BeanPropertyRowMapper<Student>(Student.class));
 		return one;
 	}

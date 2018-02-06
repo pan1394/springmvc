@@ -2,12 +2,9 @@ package com.yilin.www.spring.mvc.controller;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,21 +17,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.yilin.www.spring.dao.StudentDao;
 import com.yilin.www.spring.entity.Student;
 import com.yilin.www.spring.mvc.logmanager.SystemControllerLog;
 import com.yilin.www.spring.mvc.model.ResultModel;
+import com.yilin.www.spring.service.StudentService;
 import com.yilin.www.spring.token2.Authorization;
 
-@RestController
-@Transactional
+@RestController 
 public class StudentController {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	  
-	@Autowired
-	@Qualifier("studentDao2")
-	private StudentDao stud;
+	@Autowired 
+	private StudentService stud;
 	 
 	@Authorization
 	@PutMapping("/students")
@@ -50,7 +45,7 @@ public class StudentController {
 	@SystemControllerLog(description="test_for_logsystem") 
 	public ResponseEntity<ResultModel> enroll(@RequestBody Student student){ 
 		 Long id = stud.enrollStudent(student);
-		 List<Student> enrolled = stud.getStudent(id);
+	     Student enrolled = stud.getStudent(id);
 		 logger.info("Enrolled one student: {}", enrolled.toString());
 		 return new ResponseEntity<ResultModel>(ResultModel.ok(enrolled), HttpStatus.OK);  
 	}
@@ -69,8 +64,8 @@ public class StudentController {
 	 @DeleteMapping(value="/students/{id}")  
 	 @SystemControllerLog(description="test_for_logsystem")
 	 public ResponseEntity<ResultModel> delete(@PathVariable Long id) { 
-		List<Student> show = stud.getStudent(id);
-		if(show.size() > 0){
+		Student show = stud.getStudent(id);
+		if(show != null){
 			stud.removeStudent(id);
 		}
 		logger.info("Display all students: {}", show.toString());

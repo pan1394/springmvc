@@ -1,7 +1,6 @@
 package com.yilin.www.spring.token2.interceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -11,9 +10,9 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
-import com.yilin.www.spring.dao.StudentDao;
 import com.yilin.www.spring.entity.Student;
 import com.yilin.www.spring.mvc.utils.Constants;
+import com.yilin.www.spring.service.StudentService;
 import com.yilin.www.spring.token2.CurrentUser;
 
  
@@ -25,9 +24,8 @@ import com.yilin.www.spring.token2.CurrentUser;
 @Component
 public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-    @Autowired
-    @Qualifier("studentDao2")
-    private StudentDao userRepository;
+    @Autowired 
+    private StudentService userRepository;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) { 
@@ -42,7 +40,7 @@ public class CurrentUserMethodArgumentResolver implements HandlerMethodArgumentR
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Long currentUserId = (Long) webRequest.getAttribute(Constants.CURRENT_USER_ID, RequestAttributes.SCOPE_REQUEST);
         if (currentUserId != null) {
-            return userRepository.getStudent(currentUserId).get(0);
+            return userRepository.getStudent(currentUserId);
         }
         throw new MissingServletRequestPartException(Constants.CURRENT_USER_ID);
     }

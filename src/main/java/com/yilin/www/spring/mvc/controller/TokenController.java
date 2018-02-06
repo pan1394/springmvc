@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
@@ -19,16 +18,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.yilin.www.spring.dao.StudentDao;
+import com.yilin.www.spring.entity.Student;
 import com.yilin.www.spring.mvc.config.ResultStatus;
 import com.yilin.www.spring.mvc.model.ResultModel;
 import com.yilin.www.spring.mvc.utils.Constants;
 import com.yilin.www.spring.mvc.utils.CookieUtils;
+import com.yilin.www.spring.service.StudentService;
 import com.yilin.www.spring.token2.Authorization;
 import com.yilin.www.spring.token2.CurrentUser;
 import com.yilin.www.spring.token2.TokenManager;
 import com.yilin.www.spring.token2.TokenModel;
-import com.yilin.www.spring.entity.Student;
  
 
 /**
@@ -42,9 +41,8 @@ public class TokenController {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-    @Autowired
-    @Qualifier("studentDao2")
-    private StudentDao userRepository;
+    @Autowired 
+    private StudentService userRepository;
 
     @Autowired
     private TokenManager tokenManager;
@@ -60,10 +58,10 @@ public class TokenController {
         Assert.notNull(userId, "username can not be empty");
         Assert.notNull(password, "password can not be empty");
 
-        List< Student> user = userRepository.getStudent((userId));
-        if (user == null ||  //閺堫亝鏁為崘锟�
+        Student user = userRepository.getStudent((userId));
+        if (user == null  //閺堫亝鏁為崘锟�
                 //!user.getPassword().equals(password)
-                user.size() != 1
+                //  user.size() != 1
         		) {  //鐎靛棛鐖滈柨娆掝嚖
             //閹绘劗銇氶悽銊﹀煕閸氬秵鍨ㄧ�靛棛鐖滈柨娆掝嚖
             return new ResponseEntity<ResultModel>(ResultModel.error(ResultStatus.USERNAME_OR_PASSWORD_ERROR), HttpStatus.NOT_FOUND);
