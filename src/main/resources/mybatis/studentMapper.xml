@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>    
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+  
+<!-- namespace的值就是dao接口的完整路劲，就这个demo而言namespace 就是userDao.java的完整路劲 -->  
+<mapper namespace="com.yilin.www.spring.dao.StudentDao">  
+        <!-- 这里的id就是接口中方法的名称 -->  
+        <select id="getStudent" parameterType="long" resultType="com.yilin.www.spring.entity.Student">   
+                select * from student where id= #{id}
+        </select>  
+        
+        <insert id="enrollStudent" parameterType="com.yilin.www.spring.entity.Student" useGeneratedKeys="true" keyProperty="id" >
+        	insert into student(name) values(#{name})
+        </insert>
+        
+        <select id="getMaxStudentId" resultType="long">
+        	select max(id) from student
+        </select>
+        
+        <select id="getAllStudents" resultType="com.yilin.www.spring.entity.Student">
+        	select * from student
+        </select>
+        
+        <delete id="removeStudent" parameterType="long"  >
+        	delete from student where id=#{id}
+        </delete>
+        
+        <select id="getStudentByName" parameterType="string" resultType="com.yilin.www.spring.entity.Student">
+        	select * from student where name=#{name}
+        </select>
+        
+        <update id="updateSudent" parameterType="com.yilin.www.spring.entity.Student"  >
+        	update student set name=#{name} where id=#{id}
+        </update>
+</mapper>    

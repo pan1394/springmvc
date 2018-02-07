@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.yilin.www.spring.dao.StudentDao;
 import com.yilin.www.spring.entity.Student;
 import com.yilin.www.spring.mvc.aop.TimeConsumerAOP;
-@Component
+@Component("studentDao_jdbc")
 public class StudentDaoImpl extends JdbcDaoSupport implements StudentDao {
 
 	private ReentrantLock lock = new ReentrantLock();

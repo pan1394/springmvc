@@ -22,6 +22,7 @@
   	<tx:annotation-driven transaction-manager="transactionManager" /> 
   	
   	<import resource="./derby-context.xml" />
+  	<import resource="./mybatis-context.xml" />
   	<import resource="./spring-redis.xml" />
   	<import resource="./spring-swagger.xml" /> 
 </beans>
