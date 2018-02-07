@@ -87,12 +87,10 @@ public class StudentDaoImpl extends JdbcDaoSupport implements StudentDao {
 	}
 
 	@Override
-	public Student updateSudent(Student student) {
+	public long updateSudent(Student student) {
 		StringBuffer sql = new StringBuffer("update student set name=? where id=?");
 		int i = this.getJdbcTemplate().update(sql.toString(), student.getName(), student.getId());
-		if(i == 1)
-			return student;
-		return null;
+		return (long)i;
 	}
 	
 	

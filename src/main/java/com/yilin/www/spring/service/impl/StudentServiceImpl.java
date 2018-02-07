@@ -56,7 +56,10 @@ public class StudentServiceImpl implements StudentService{
 
 	@Override
 	public Student updateSudent(Student student) {
-		return stud.updateSudent(student);
+		 long i = stud.updateSudent(student);
+		 if(i > 0)
+			 return student;
+		 else return new Student();
 	}
 
 }

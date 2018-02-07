@@ -49,9 +49,9 @@ public class StudentDaoImpl extends HibernateDaoImpl<Student, Long> implements S
 	}
 
 	@Override
-	public Student updateSudent(Student student) {
+	public long updateSudent(Student student) {
 		this.update(student);
-		return student;
+		return 1;
 	}
  
 	  

@@ -207,13 +207,13 @@
 				</exclusion> 
 			</exclusions> 
 		</dependency> 
-	<!-- jaxb for hibernate 
+	<!-- jaxb for hibernate -->
 	<dependency>
         <groupId>javax.xml.bind</groupId>
         <artifactId>jaxb-api</artifactId>
         <version>2.3.0</version>
     </dependency> 
-    <dependency>
+   <!--  <dependency>
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-impl</artifactId>
         <version>2.3.0</version>
@@ -222,7 +222,7 @@
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-core</artifactId>
         <version>2.3.0</version>
-    </dependency>-->
+    </dependency> -->
     
     
     <!-- cache for hibernate -->

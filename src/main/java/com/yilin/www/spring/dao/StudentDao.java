@@ -13,6 +13,6 @@ public interface StudentDao{
 	public List<Student> getAllStudents();
 	public Long removeStudent(Long Id);
 	public Student getStudentByName(String name);
-	public Student updateSudent(Student student);
+	public long updateSudent(Student student);
 	
 }
