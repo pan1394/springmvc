@@ -47,11 +47,11 @@
 	</bean> -->
     
     <!-- Example: a logical view name of 'showMessage' is mapped to '/WEB-INF/jsp/showMessage.jsp' -->
-	<!-- 
+ 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-            <property name="prefix" value="/WEB-INF/swagger/"/>
+            <property name="prefix" value="/static/jsp"/>
             <property name="suffix" value=".jsp"/>
     </bean>
-  	-->
+   
  
 </beans>
